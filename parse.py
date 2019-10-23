@@ -2,14 +2,18 @@ import pcapkit
 import json
 
 
-def pcaptojson(file):
-    jsondata = pcapkit.extract(fin=file, nofile=True, format='json', auto=False, engine='deafult', extension=False, layer='Transport', tcp=True, ip=True, strict=True, store=False)
+def pcaptojson(file) -> list:
+    jsondata = pcapkit.extract(fin=file, nofile=True, format='json', auto=False, 
+    engine='deafult', extension=False, layer='Transport', tcp=True, ip=True,strict=True, store=False)
+    final = []
+    print("Finished extract")
     for obj in jsondata:
+        main = {}
         data = {}
         print(obj.name)
         try:
             time = (obj.info.info2dict()['time_epoch'])
-            data["time_epoc"] = time
+            main["time_epoc"] = time
         except KeyError:
             pass
         try:
@@ -20,6 +24,11 @@ def pcaptojson(file):
                     macdst.append(delim)
             finalmacdst = ''.join(macdst)
             data["macdst"] = finalmacdst
+        except KeyError:
+            pass
+        try: 
+            connecttype = (obj.info.info2dict()['ethernet']['type'])
+            data["type"] = str(connecttype)
         except KeyError:
             pass
         try:
@@ -54,7 +63,7 @@ def pcaptojson(file):
             pass
         try:
             ipv4proto = (obj.info.info2dict()['ethernet']['ipv4']['proto'])
-            data["ipv4proto"] = ipv4proto
+            data["ipv4proto"] = str(ipv4proto)
         except KeyError:
             pass
         try:
@@ -69,7 +78,7 @@ def pcaptojson(file):
             pass
         try:
             ipv6proto = (obj.info.info2dict()['ethernet']['ipv6']['proto'])
-            data["ipv6proto"] = ipv6proto
+            data["ipv6proto"] = str(ipv6proto)
         except KeyError:
             pass
         try:
@@ -102,10 +111,16 @@ def pcaptojson(file):
             data["ipv6udpsrcport"] = ipv6udpsrcport
         except KeyError:
             pass
-        datajson = json.dumps(data)
-        print(datajson)
+        
+        
+        main["data"] = data
+        final.append(main)
+        # print((main))
+        # print(final)
+    return final
 
-        print('\n')
 
-
-pcaptojson('pcaptest')
+print("Starting")
+mylist = pcaptojson('test.pcap')
+print(mylist)
+print("complete")
