@@ -9,7 +9,6 @@ def pcaptojson(file) -> list:
     for obj in jsondata:
         main = {}
         data = {}
-        print(obj.name)
         try:
             time = (obj.info.info2dict()['time_epoch'])
             main["time_epoc"] = time
