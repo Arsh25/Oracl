@@ -14,7 +14,7 @@ An easy to use network monitoring system that can be used to compare packets cap
   - Compare uploaded pcaps with data seen on the network
   
 ## Development
-__Note:__ This project is under heavy development bu we will always try and keep the test branch in some working state.
+__Note:__ This project is under heavy development but we will always try and keep the test branch in some working state.
 
 ### Current State
 
