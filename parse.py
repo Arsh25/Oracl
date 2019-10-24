@@ -6,7 +6,6 @@ def pcaptojson(file) -> list:
     jsondata = pcapkit.extract(fin=file, nofile=True, format='json', auto=False, 
     engine='deafult', extension=False, layer='Transport', tcp=True, ip=True,strict=True, store=False)
     final = []
-    print("Finished extract")
     for obj in jsondata:
         main = {}
         data = {}
@@ -115,12 +114,6 @@ def pcaptojson(file) -> list:
         
         main["data"] = data
         final.append(main)
-        # print((main))
-        # print(final)
     return final
 
 
-print("Starting")
-mylist = pcaptojson('test.pcap')
-print(mylist)
-print("complete")
