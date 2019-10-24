@@ -13,6 +13,7 @@ case "$choice" in
   * ) echo "invalid" && exit;;
 esac
 echo
-echo "files will be stored in /var/tmp/capture_date_time_captured.pcap creating a new file every 10 mins or 10mb in file size."
+mkdir /var/tmp/oracl
+echo "files will be stored in /var/tmp/oracl/capture_date_time_captured.pcap creating a new file every 10 mins or 10mb in file size."
 
-tcpdump -i ${inputdevice} -w /var/tmp/capture-%m-%d_%H.%M.%S.pcap -G 600 -C 10
+tcpdump -i ${inputdevice} -w /var/tmp/oracl/capture-%m-%d_%H.%M.%S.%s.pcap -G 600 -C 10
