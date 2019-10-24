@@ -3,7 +3,7 @@ import logging
 from pymongo import MongoClient
 from pymongo import errors as mongoerrors
 
-def insert_data(client, database, coloumn, data)-> bool:
+def insert_data(client, database, coloumn, data)-> tuple:
     dbclient = MongoClient(client)
     db = dbclient[database]
     dbcol = db[coloumn]
@@ -11,5 +11,5 @@ def insert_data(client, database, coloumn, data)-> bool:
         dbcol.insert_many(data)
     except mongoerrors.PyMongoError as e:
         logging.exception(e)
-        return False
-    return True
+        return False, e
+    return True, None
