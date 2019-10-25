@@ -1,0 +1,5 @@
+#this is a config file for tcpdump
+inputdevice={eth0}
+folder={/oracl/captures}
+filesize={10}
+durtation={600}
