@@ -34,4 +34,8 @@ This should print a list of dicts where each element looks something like
 
 __Note__: The current version takes around 30 minutes to parse the 15,000 frames in `smallFlow.pcap`. It takes about 10 seconds to do the 150 frames in `test.pcap`
   
-  
+### To-Do
+
+- Experiment with multi-threading to try to cut down on parsing time
+- Create a database using MongoDB to store our parsed pcaps
+- Add functionality to the Flask server to get and update values from the database
