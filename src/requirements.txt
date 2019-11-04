@@ -1,5 +1,3 @@
-tcpdump 
-libpcap 
-pcapkit
+pypcapkit
 pymongo
 flask
