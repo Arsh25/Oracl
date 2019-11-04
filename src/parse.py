@@ -1,6 +1,6 @@
 import pcapkit
 import json
-
+import multiprocessing
 
 def pcaptojson(file) -> dict:
     return(pcapkit.extract(fin=file, nofile=True, format='json', auto=False, 
@@ -114,5 +114,22 @@ def pcapparse(obj) -> dict
     return main
 
 
+def pcaplist(jsondict) -> list:
+    manager = multiprocessing.Manager()
+    final = manager.list()
+    pool = multiprocessing.Pool(processes=4)
+    for obj in jsondict:
+        pool.apply_async(pcapparse(obj),final)
+        pool.close()
+        pool.join()
+    return final
+
+def main():
+    jsondict = pcaptojson("filenamehere")
+    pcaplist = pcaplist(jsondict)
+    
+
+if __name__ == "__main__":
+    main()
 
 
