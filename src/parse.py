@@ -1,13 +1,14 @@
 import pcapkit
 import json
 import multiprocessing
+import os
 
 def pcaptojson(file) -> dict:
     return(pcapkit.extract(fin=file, nofile=True, format='json', auto=False, 
         engine='deafult', extension=False, layer='Transport', tcp=True, ip=True,strict=True, store=False))
     
 
-def pcapparse(obj) -> dict
+def pcapparse(obj) -> dict:
     main = {}
     data = {}
     try:
@@ -115,18 +116,17 @@ def pcapparse(obj) -> dict
 
 
 def pcaplist(jsondict) -> list:
-    manager = multiprocessing.Manager()
-    final = manager.list()
-    pool = multiprocessing.Pool(processes=4)
+    pool = multiprocessing.Pool(processes=os.cpu_count())
+    print(os.cpu_count())
     for obj in jsondict:
-        pool.apply_async(pcapparse(obj),final)
-        pool.close()
-        pool.join()
-    return final
+        # pcapparse(obj)
+        pool.apply_async(pcapparse(obj))
+    pool.close()
+    pool.join()
 
 def main():
-    jsondict = pcaptojson("filenamehere")
-    pcaplist = pcaplist(jsondict)
+    jsondict = pcaptojson("../SampleDumps/test.pcap")
+    pcaplist(jsondict)
     
 
 if __name__ == "__main__":
