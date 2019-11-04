@@ -2,6 +2,7 @@ import pcapkit
 import json
 import multiprocessing
 import os
+# from multiprocessing.pool import ThreadPool as Pool
 
 def pcaptojson(file) -> dict:
     return(pcapkit.extract(fin=file, nofile=True, format='json', auto=False, 
@@ -117,10 +118,10 @@ def pcapparse(obj) -> dict:
 
 def pcaplist(jsondict) -> list:
     pool = multiprocessing.Pool(processes=os.cpu_count())
-    print(os.cpu_count())
+    # pool = Pool(16)
     for obj in jsondict:
         # pcapparse(obj)
-        pool.apply_async(pcapparse(obj))
+        pool.apply_async(pcapparse, (obj))
     pool.close()
     pool.join()
 
