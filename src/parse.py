@@ -125,7 +125,7 @@ def pcaplist(jsondict) -> list:
     pool.join()
 
 def main():
-    jsondict = pcaptojson("../SampleDumps/test.pcap")
+    jsondict = pcaptojson("../SampleDumps/smallFlows.pcap")
     pcaplist(jsondict)
     
 
