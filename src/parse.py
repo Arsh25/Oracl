@@ -1,8 +1,5 @@
 import pcapkit
 import json
-import multiprocessing
-from time import time
-import os
 
 def pcaptojson(file) -> dict:
     return(pcapkit.extract(fin=file, nofile=True, format='json', auto=False, 
