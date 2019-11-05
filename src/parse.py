@@ -3,7 +3,6 @@ import json
 import multiprocessing
 from time import time
 import os
-# from multiprocessing.pool import ThreadPool as Pool
 
 def pcaptojson(file) -> dict:
     return(pcapkit.extract(fin=file, nofile=True, format='json', auto=False, 
@@ -119,23 +118,16 @@ def pcapparse(obj) -> dict:
 
 
 def pcaplist(jsondict) -> list:
-    pool = multiprocessing.Pool(processes=os.cpu_count())
-    print(os.cpu_count())
-    start_time = time()
-    # pool = Pool(16)
+    final = []
     for obj in jsondict:
-        # pcapparse(obj)
-        pool.apply_async(pcapparse, (obj))
-    pool.close()
-    pool.join()
-    end_time = time()
-    print("Time to process: ",end_time-start_time, " seconds")
+        final.append(pcapparse(obj))
+    return final
 
 
 def main():
     jsondict = pcaptojson("../SampleDumps/smallFlows.pcap")
-    pcaplist(jsondict)
-    
+    final = pcaplist(jsondict)
+
 
 if __name__ == "__main__":
     main()
