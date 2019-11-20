@@ -1,4 +1,4 @@
-from flask import Flask, flash, request, redirect, url_for
+from flask import Flask, flash, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 import os
 import json
@@ -47,6 +47,11 @@ def post_pcap():
       <input type=submit value=Upload>
     </form>
     '''
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
 
 @app.route("/getComparisonResults", methods=['GET'])
 def get_comparision_results():
