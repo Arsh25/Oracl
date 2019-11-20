@@ -8,7 +8,7 @@ def insert_data(client, database, coloumn, data)-> tuple:
     db = dbclient[database]
     dbcol = db[coloumn]
     try:
-        dbcol.insert_many(data)
+        dbcol.insert_one (data)
     except mongoerrors.PyMongoError as e:
         logging.exception(e)
         return False, e
