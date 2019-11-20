@@ -3,10 +3,10 @@ import logging
 from pymongo import MongoClient
 from pymongo import errors as mongoerrors
 
-def insert_data(client, database, coloumn, data)-> tuple:
+def insert_data(client, database, column, data)-> tuple:
     dbclient = MongoClient(client)
     db = dbclient[database]
-    dbcol = db[coloumn]
+    dbcol = db[column]
     try:
         dbcol.insert_one (data)
     except mongoerrors.PyMongoError as e:
