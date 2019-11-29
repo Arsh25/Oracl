@@ -1,5 +1,6 @@
 from flask import Flask, flash, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
+from pymongofunct import get_data
 import os
 import json
 
@@ -24,6 +25,18 @@ def get_traffic():
     mac = request.args.get('mac')
     return request.query_string
 
+@app.route("/getPcaps", methods=['GET'])
+def get_pcap():
+    client = 'localhost'
+    db = 'oracl'
+    collection = 'pcaps'
+    query = {"time_epoc" : 1295981545.127826}
+    data = get_data(client, db, collection, query)
+    if data[0]:
+        return data[1]
+    else:
+        return "Error retrieving data"
+
 @app.route("/postPcap", methods=['POST','GET'])
 def post_pcap():
     if request.method == 'POST':
@@ -38,7 +51,8 @@ def post_pcap():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('uploaded_file', filename=filename))
-    return '''
+    return 
+    '''
     <!doctype html>
     <title>Upload new File</title>
     <h1>Upload new File</h1>
