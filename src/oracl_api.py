@@ -16,7 +16,7 @@ def allowed_file(filename):
 
 @app.route("/getTraffic", methods=['GET'])
 def get_traffic():
-    timestart = float(request.args.get('t_start'))
+    timestart = request.args.get('t_start')
     timeend = request.args.get('t_end')
     ip = request.args.get('ip')
     dstport = request.args.get('dstport')
@@ -29,8 +29,10 @@ def get_traffic():
     if timestart or timeend:
         query['time_epoc'] = {}
         if timestart:
+            timestart = float(timestart)
             query['time_epoc']['$gte'] = timestart
         if timeend:
+            timeend = float(timeend)
             query['time_epoc']['$lte'] = timeend
 
     client = 'localhost'
