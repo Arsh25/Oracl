@@ -16,14 +16,28 @@ def allowed_file(filename):
 
 @app.route("/getTraffic", methods=['GET'])
 def get_traffic():
-    timestart = request.args.get('t_start')
+    timestart = float(request.args.get('t_start'))
     timeend = request.args.get('t_end')
-    pagenum = request.args.get('page-no')
     ip = request.args.get('ip')
     dstport = request.args.get('dstport')
     srcport = request.args.get('srcport')
     mac = request.args.get('mac')
-    return request.query_string
+
+    pagenum = request.args.get('page-no')
+
+    query = {}
+
+    client = 'localhost'
+    db = 'oracl'
+    collection = 'pcaps'
+    return_tuple = get_data(client, db, collection, query)
+
+    data = return_tuple[1]
+    alldata = {}
+    for i in range(len(data)):
+        alldata[i] = data[i]
+    return alldata
+    #return request.query_string
 
 @app.route("/getPcaps", methods=['GET'])
 def get_pcap():
