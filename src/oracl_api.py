@@ -26,6 +26,12 @@ def get_traffic():
     pagenum = request.args.get('page-no')
 
     query = {}
+    if timestart or timeend:
+        query['time_epoc'] = {}
+        if timestart:
+            query['time_epoc']['$gt'] = timestart
+        if timeend:
+            query['time_epoc']['$lt'] = timeend
 
     client = 'localhost'
     db = 'oracl'
@@ -38,18 +44,6 @@ def get_traffic():
         alldata[i] = data[i]
     return alldata
     #return request.query_string
-
-@app.route("/getPcaps", methods=['GET'])
-def get_pcap():
-    client = 'localhost'
-    db = 'oracl'
-    collection = 'pcaps'
-    query = {"time_epoc" : 1295981545.127826}
-    data = get_data(client, db, collection, query)
-    if data[0]:
-        return data[1]
-    else:
-        return "Error retrieving data"
 
 @app.route("/postPcap", methods=['POST','GET'])
 def post_pcap():
