@@ -29,9 +29,9 @@ def get_traffic():
     if timestart or timeend:
         query['time_epoc'] = {}
         if timestart:
-            query['time_epoc']['$gt'] = timestart
+            query['time_epoc']['$gte'] = timestart
         if timeend:
-            query['time_epoc']['$lt'] = timeend
+            query['time_epoc']['$lte'] = timeend
 
     client = 'localhost'
     db = 'oracl'
