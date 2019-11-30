@@ -1,5 +1,6 @@
 import pymongo
 import logging
+import json
 from pymongo import MongoClient
 from pymongo import errors as mongoerrors
 from bson.json_util import dumps
@@ -21,7 +22,7 @@ def get_data(client, database, coloumn, query)-> tuple:
     db = dbclient[database]
     dbcol = db[coloumn]
     try:
-        alldata = dumps(dbcol.find(query))
+        alldata = json.loads(dumps(dbcol.find(query)))[0]
     except mongoerrors.PyMongoError as e:
         logging.exception(e)
         return False, e
