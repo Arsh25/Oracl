@@ -18,10 +18,15 @@ def allowed_file(filename):
 def get_traffic():
     timestart = request.args.get('t_start')
     timeend = request.args.get('t_end')
-    ip = request.args.get('ip')
-    dstport = request.args.get('dstport')
-    srcport = request.args.get('srcport')
-    mac = request.args.get('mac')
+
+    ipdst = request.args.get('ip_dst')
+    ipsrc = request.args.get('ip_src')
+
+    macdst = request.args.get('mac_dst')
+    macsrc = request.args.get('mac_src')
+
+    dstport = request.args.get('port_dst')
+    srcport = request.args.get('port_src')
 
     pagenum = request.args.get('page-no')
 
@@ -34,6 +39,26 @@ def get_traffic():
         if timeend:
             timeend = float(timeend)
             query['time_epoc']['$lte'] = timeend
+
+    if ipdst:
+        query['data.ipv4dst'] = ipdst
+
+    if ipsrc:
+        query['data.ipv4src'] = ipsrc
+
+    if macdst:
+        query['data.macdst'] = macdst
+
+    if macsrc:
+        query['data.macsrc'] = macsrc
+
+    if dstport:
+        dstport = int(dstport)
+        query['data.tcpdstport'] = dstport
+
+    if srcport:
+        srcport = int(srcport)
+        query['data.tcpsrcport'] = srcport
 
     client = 'localhost'
     db = 'oracl'
