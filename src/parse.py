@@ -1,5 +1,6 @@
 import pcapkit
 import json
+from pymongofunct import insert_data
 
 def pcaptojson(file) -> dict:
     return(pcapkit.extract(fin=file, nofile=True, format='json', auto=False, 
@@ -111,6 +112,7 @@ def pcapparse(obj) -> dict:
     except KeyError:
         pass
     main["data"] = data
+    insert_data('localhost','oracl','pcaps',main)
     return main
 
 
