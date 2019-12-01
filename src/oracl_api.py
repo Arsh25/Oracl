@@ -4,7 +4,7 @@ from pymongofunct import get_data
 import os
 import json
 
-UPLOAD_FOLDER = '/etc/oracl'
+UPLOAD_FOLDER = os.path.dirname(os.path.abspath(__file__)) + "/../uploads"
 ALLOWED_EXTENSIONS = {'pcap'}
 
 app = Flask(__name__)
@@ -61,8 +61,7 @@ def post_pcap():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('uploaded_file', filename=filename))
-    return 
-    '''
+    return '''
     <!doctype html>
     <title>Upload new File</title>
     <h1>Upload new File</h1>
