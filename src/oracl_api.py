@@ -99,14 +99,18 @@ def post_pcap():
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    final = pcapwork(filename)
+    final = pcapwork(UPLOAD_FOLDER + '/'+ filename)
     client = 'localhost'
     db = 'oracl'
     collection = str(filename)
     return_tuple = insert_data(client, db, collection, final)
-    
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
+    if(return_tuple[0]):
+        return send_from_directory(app.config['UPLOAD_FOLDER'],
+                                filename)
+    else:
+        return(return_tuple[1])
+
+
 
 @app.route("/getComparisonResults", methods=['GET'])
 def get_comparision_results():
