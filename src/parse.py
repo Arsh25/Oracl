@@ -123,12 +123,7 @@ def pcaplist(jsondict) -> list:
     return final
 
 
-def main():
-    jsondict = pcaptojson("../SampleDumps/smallFlows.pcap")
-    final = pcaplist(jsondict)
-
-
-if __name__ == "__main__":
-    main()
-
-
+def pcapwork(filename):
+    jsondict = pcaptojson(filename)
+    return pcaplist(jsondict)
+    
