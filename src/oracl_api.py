@@ -31,7 +31,7 @@ def get_traffic():
 
     dstport = request.args.get('port_dst')
     srcport = request.args.get('port_src')
-
+    collection = request.args.get('collection')
     pagenum = request.args.get('page-no')
 
     query = {}
@@ -43,7 +43,6 @@ def get_traffic():
         if timeend:
             timeend = float(timeend)
             query['time_epoc']['$lte'] = timeend
-
     if ipdst:
         query['data.ipv4dst'] = ipdst
 
@@ -64,8 +63,12 @@ def get_traffic():
         srcport = int(srcport)
         query['data.tcpsrcport'] = srcport
 
+    if collection:
+        collect = collection
+    else:
+        collect = COLLECTION
 
-    return_tuple = get_data(CLIENT, DB, COLLECTION, query)
+    return_tuple = get_data(CLIENT, DB, collect, query)
 
     data = return_tuple[1]
     alldata = {}
@@ -104,8 +107,7 @@ def uploaded_file(filename):
     collection = filename
     return_tuple = insert_data(CLIENT, DB, collection, final)
     if(return_tuple[0]):
-        return send_from_directory(app.config['UPLOAD_FOLDER'],
-                                filename)
+        return "Data added to DB at " + collection
     else:
         return(return_tuple[1])
 
