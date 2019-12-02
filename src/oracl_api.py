@@ -5,6 +5,9 @@ from parse import pcapwork
 import os
 import json
 
+CLIENT = 'localhost'
+DB = 'oracl'
+COLLECTION = 'pcaps'
 UPLOAD_FOLDER = os.path.dirname(os.path.abspath(__file__)) + "/../uploads"
 ALLOWED_EXTENSIONS = {'pcap'}
 
@@ -61,10 +64,8 @@ def get_traffic():
         srcport = int(srcport)
         query['data.tcpsrcport'] = srcport
 
-    client = 'localhost'
-    db = 'oracl'
-    collection = 'pcaps'
-    return_tuple = get_data(client, db, collection, query)
+
+    return_tuple = get_data(CLIENT, DB, COLLECTION, query)
 
     data = return_tuple[1]
     alldata = {}
@@ -100,10 +101,8 @@ def post_pcap():
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     final = pcapwork(UPLOAD_FOLDER + '/'+ filename)
-    client = 'localhost'
-    db = 'oracl'
-    collection = str(filename)
-    return_tuple = insert_data(client, db, collection, final)
+    collection = filename
+    return_tuple = insert_data(CLIENT, DB, collection, final)
     if(return_tuple[0]):
         return send_from_directory(app.config['UPLOAD_FOLDER'],
                                 filename)
