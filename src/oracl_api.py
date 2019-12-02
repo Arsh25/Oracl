@@ -71,9 +71,7 @@ def get_traffic():
     return_tuple = get_data(CLIENT, DB, collect, query)
 
     data = return_tuple[1]
-    alldata = {}
-    for i in range(len(data)):
-        alldata[i] = data[i]
+    alldata = json.dumps(data)
     return alldata
     #return request.query_string
 
@@ -117,7 +115,6 @@ def uploaded_file(filename):
 def get_comparision_results():
     timestart = request.args.get('t_start')
     timeend = request.args.get('t_end')
-
     ipdst = request.args.get('ip_dst')
     ipsrc = request.args.get('ip_src')
 
@@ -165,13 +162,10 @@ def get_comparision_results():
     usertuple = get_data(CLIENT, DB, collect, query) 
     oracldata = oracltuple[1]
     userdata = usertuple[1]
-
-    diffdata = {}
-    for i in range(len(userdata)):
-        if(userdata[i] != oracldata[i]):
-            diffdata[i] = userdata[i]
-    
-    return diffdata
+    alldata = oracldata
+    alldata.append(userdata)
+    jalldata = json.dumps(alldata)
+    return jalldata
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')
