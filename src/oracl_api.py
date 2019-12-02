@@ -1,6 +1,7 @@
 from flask import Flask, flash, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
-from pymongofunct import get_data
+from pymongofunct import get_data, insert_data
+from parse import pcapwork
 import os
 import json
 
@@ -98,6 +99,12 @@ def post_pcap():
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
+    final = pcapwork(filename)
+    client = 'localhost'
+    db = 'oracl'
+    collection = str(filename)
+    return_tuple = insert_data(client, db, collection, final)
+    
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
 
