@@ -14,7 +14,59 @@ def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route("/getTraffic", methods=['GET'])
+@app.route("/search", methods=['GET', 'POST'])
+def test():
+    if request.method == "POST":
+        search_values = {}
+
+        searches = ["timestart", "timeend",
+                    "ipdst", "ipsrc",
+                    "macdst", "macsrc",
+                    "dstport", "srcport"]
+
+        for each_search in searches:
+            try:
+                input = request.form[each_search]
+                search_values[each_search] = input
+            except:
+                pass
+            
+        redirect_string = "?"
+        for key in search_values:
+            print("Key: ", key, ", Value: ", search_values[key])
+            redirect_string += key + '=' + search_values[key]
+
+        return redirect('getTraffic'+redirect_string)
+    return '''
+    <!doctype html>
+    <title>Oracl</title>
+    <h1>Search Options</h1>
+    <form role='form' method=post action='/test'>
+      <input type='text' name='timestart' class='form-control' id='timestart-box' placeholder='Enter start time...' style='width: 300px;' autofocus required>
+      <br>
+      <input type='text' name='timeend' class='form-control' id='timeend-box' placeholder='Enter end time...' style='width: 300px;' autofocus required>
+      <br>
+      
+      <input type='text' name='ipdst' class='form-control' id='ipdst-box' placeholder='Enter destination ip...' style='width: 300px;' autofocus required>
+      <br>
+      <input type='text' name='ipsrc' class='form-control' id='ipsrc-box' placeholder='Enter source ip...' style='width: 300px;' autofocus required>
+      <br>
+      
+      <input type='text' name='macdst' class='form-control' id='macdst-box' placeholder='Enter destination mac address...' style='width: 300px;' autofocus required>
+      <br>
+      <input type='text' name='macsrc' class='form-control' id='macsrc-box' placeholder='Enter source mac address...' style='width: 300px;' autofocus required>
+      <br>
+      
+      <input type='text' name='dstport' class='form-control' id='dstport-box' placeholder='Enter destination port...' style='width: 300px;' autofocus required>
+      <br>
+      <input type='text' name='srcport' class='form-control' id='srcport-box' placeholder='Enter source port...' style='width: 300px;' autofocus required>
+      <br>
+      
+      <button type='submit' class='btn btn-default'>Submit</button>
+    </form>
+    '''
+
+@app.route("/getTraffic", methods=['GET', 'POST'])
 def get_traffic():
     timestart = request.args.get('t_start')
     timeend = request.args.get('t_end')
