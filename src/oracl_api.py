@@ -154,9 +154,9 @@ def post_pcap():
                     os.mkdir(UPLOAD_FOLDER)
                 except OSError as e:
                     pass
-                else:
-                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                    return redirect(url_for('uploaded_file', filename=filename))
+            else:
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                return redirect(url_for('uploaded_file', filename=filename))
     return '''
     <!doctype html>
     <title>Upload new File</title>
