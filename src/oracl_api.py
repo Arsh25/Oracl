@@ -74,8 +74,7 @@ def test():
     </form>
     '''
 
-@app.route("/getTraffic", methods=['GET', 'POST'])
-def get_traffic():
+def get_query(request):
     timestart = request.args.get('t_start')
     timeend = request.args.get('t_end')
 
@@ -87,7 +86,7 @@ def get_traffic():
 
     dstport = request.args.get('port_dst')
     srcport = request.args.get('port_src')
-    collection = request.args.get('collection')
+    
     pagenum = request.args.get('page-no')
 
     query = {}
@@ -119,6 +118,13 @@ def get_traffic():
         srcport = int(srcport)
         query['data.tcpsrcport'] = srcport
 
+    return query
+
+@app.route("/getTraffic", methods=['GET', 'POST'])
+def get_traffic():
+    query = get_query(request)
+
+    collection = request.args.get('collection')
     if collection:
         collect = collection
     else:
@@ -175,47 +181,9 @@ def uploaded_file(filename):
 
 @app.route("/getComparisonResults", methods=['GET'])
 def get_comparision_results():
-    timestart = request.args.get('t_start')
-    timeend = request.args.get('t_end')
-    ipdst = request.args.get('ip_dst')
-    ipsrc = request.args.get('ip_src')
+    query = get_query(request)
 
-    macdst = request.args.get('mac_dst')
-    macsrc = request.args.get('mac_src')
-
-    dstport = request.args.get('port_dst')
-    srcport = request.args.get('port_src')
     collection = request.args.get('collection')
-    pagenum = request.args.get('page-no')
-
-    query = {}
-    if timestart or timeend:
-        query['time_epoc'] = {}
-        if timestart:
-            timestart = float(timestart)
-            query['time_epoc']['$gte'] = timestart
-        if timeend:
-            timeend = float(timeend)
-            query['time_epoc']['$lte'] = timeend
-    if ipdst:
-        query['data.ipv4dst'] = ipdst
-
-    if ipsrc:
-        query['data.ipv4src'] = ipsrc
-
-    if macdst:
-        query['data.macdst'] = macdst
-
-    if macsrc:
-        query['data.macsrc'] = macsrc
-
-    if dstport:
-        dstport = int(dstport)
-        query['data.tcpdstport'] = dstport
-
-    if srcport:
-        srcport = int(srcport)
-        query['data.tcpsrcport'] = srcport
 
     if collection:
         collect = collection
