@@ -23,10 +23,11 @@ def test():
     if request.method == "POST":
         search_values = {}
 
-        searches = ["timestart", "timeend",
-                    "ipdst", "ipsrc",
-                    "macdst", "macsrc",
-                    "dstport", "srcport"]
+        searches = ["t_start", "t_end",
+                    "ip_dst", "ip_src",
+                    "mac_dst", "mac_src",
+                    "port_dst", "port_src",
+                    "collection"]
 
         for each_search in searches:
             try:
@@ -46,24 +47,27 @@ def test():
     <title>Oracl</title>
     <h1>Search Options</h1>
     <form role='form' method=post action='/search'>
-      <input type='text' name='timestart' class='form-control' id='timestart-box' placeholder='Enter start time...' style='width: 300px;' autofocus>
+      <input type='text' name='t_start' class='form-control' id='timestart-box' placeholder='Enter start time...' style='width: 300px;' autofocus>
       <br>
-      <input type='text' name='timeend' class='form-control' id='timeend-box' placeholder='Enter end time...' style='width: 300px;' autofocus>
-      <br>
-      
-      <input type='text' name='ipdst' class='form-control' id='ipdst-box' placeholder='Enter destination ip...' style='width: 300px;' autofocus>
-      <br>
-      <input type='text' name='ipsrc' class='form-control' id='ipsrc-box' placeholder='Enter source ip...' style='width: 300px;' autofocus>
+      <input type='text' name='t_end' class='form-control' id='timeend-box' placeholder='Enter end time...' style='width: 300px;' autofocus>
       <br>
       
-      <input type='text' name='macdst' class='form-control' id='macdst-box' placeholder='Enter destination mac address...' style='width: 300px;' autofocus>
+      <input type='text' name='ip_dst' class='form-control' id='ipdst-box' placeholder='Enter destination ip...' style='width: 300px;' autofocus>
       <br>
-      <input type='text' name='macsrc' class='form-control' id='macsrc-box' placeholder='Enter source mac address...' style='width: 300px;' autofocus>
+      <input type='text' name='ip_src' class='form-control' id='ipsrc-box' placeholder='Enter source ip...' style='width: 300px;' autofocus>
       <br>
       
-      <input type='text' name='dstport' class='form-control' id='dstport-box' placeholder='Enter destination port...' style='width: 300px;' autofocus>
+      <input type='text' name='mac_dst' class='form-control' id='macdst-box' placeholder='Enter destination mac address...' style='width: 300px;' autofocus>
       <br>
-      <input type='text' name='srcport' class='form-control' id='srcport-box' placeholder='Enter source port...' style='width: 300px;' autofocus>
+      <input type='text' name='mac_src' class='form-control' id='macsrc-box' placeholder='Enter source mac address...' style='width: 300px;' autofocus>
+      <br>
+      
+      <input type='text' name='port_dst' class='form-control' id='dstport-box' placeholder='Enter destination port...' style='width: 300px;' autofocus>
+      <br>
+      <input type='text' name='port_src' class='form-control' id='srcport-box' placeholder='Enter source port...' style='width: 300px;' autofocus>
+      <br>
+
+      <input type='text' name='collection' class='form-control' id='collection-box' placeholder='Enter collection name...' style='width: 300px;' autofocus>
       <br>
       
       <button type='submit' class='btn btn-default'>Submit</button>
