@@ -18,8 +18,63 @@ def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route("/getTraffic", methods=['GET'])
-def get_traffic():
+@app.route("/search", methods=['GET', 'POST'])
+def test():
+    if request.method == "POST":
+        search_values = {}
+
+        searches = ["t_start", "t_end",
+                    "ip_dst", "ip_src",
+                    "mac_dst", "mac_src",
+                    "port_dst", "port_src",
+                    "collection"]
+
+        for each_search in searches:
+            try:
+                input = request.form[each_search]
+                search_values[each_search] = input
+            except:
+                pass
+            
+        redirect_string = "?"
+        for key in search_values:
+            if (search_values[key]):
+                redirect_string += key + '=' + search_values[key] + '&'
+
+        return redirect('/getTraffic'+redirect_string)
+    return '''
+    <!doctype html>
+    <title>Oracl</title>
+    <h1>Search Options</h1>
+    <form role='form' method=post action='/search'>
+      <input type='text' name='t_start' class='form-control' id='timestart-box' placeholder='Enter start time...' style='width: 300px;' autofocus>
+      <br>
+      <input type='text' name='t_end' class='form-control' id='timeend-box' placeholder='Enter end time...' style='width: 300px;' autofocus>
+      <br>
+      
+      <input type='text' name='ip_dst' class='form-control' id='ipdst-box' placeholder='Enter destination ip...' style='width: 300px;' autofocus>
+      <br>
+      <input type='text' name='ip_src' class='form-control' id='ipsrc-box' placeholder='Enter source ip...' style='width: 300px;' autofocus>
+      <br>
+      
+      <input type='text' name='mac_dst' class='form-control' id='macdst-box' placeholder='Enter destination mac address...' style='width: 300px;' autofocus>
+      <br>
+      <input type='text' name='mac_src' class='form-control' id='macsrc-box' placeholder='Enter source mac address...' style='width: 300px;' autofocus>
+      <br>
+      
+      <input type='text' name='port_dst' class='form-control' id='dstport-box' placeholder='Enter destination port...' style='width: 300px;' autofocus>
+      <br>
+      <input type='text' name='port_src' class='form-control' id='srcport-box' placeholder='Enter source port...' style='width: 300px;' autofocus>
+      <br>
+
+      <input type='text' name='collection' class='form-control' id='collection-box' placeholder='Enter collection name...' style='width: 300px;' autofocus>
+      <br>
+      
+      <button type='submit' class='btn btn-default'>Submit</button>
+    </form>
+    '''
+
+def get_query(request):
     timestart = request.args.get('t_start')
     timeend = request.args.get('t_end')
 
@@ -31,7 +86,7 @@ def get_traffic():
 
     dstport = request.args.get('port_dst')
     srcport = request.args.get('port_src')
-    collection = request.args.get('collection')
+    
     pagenum = request.args.get('page-no')
 
     query = {}
@@ -63,6 +118,13 @@ def get_traffic():
         srcport = int(srcport)
         query['data.tcpsrcport'] = srcport
 
+    return query
+
+@app.route("/getTraffic", methods=['GET', 'POST'])
+def get_traffic():
+    query = get_query(request)
+
+    collection = request.args.get('collection')
     if collection:
         collect = collection
     else:
@@ -119,47 +181,9 @@ def uploaded_file(filename):
 
 @app.route("/getComparisonResults", methods=['GET'])
 def get_comparision_results():
-    timestart = request.args.get('t_start')
-    timeend = request.args.get('t_end')
-    ipdst = request.args.get('ip_dst')
-    ipsrc = request.args.get('ip_src')
+    query = get_query(request)
 
-    macdst = request.args.get('mac_dst')
-    macsrc = request.args.get('mac_src')
-
-    dstport = request.args.get('port_dst')
-    srcport = request.args.get('port_src')
     collection = request.args.get('collection')
-    pagenum = request.args.get('page-no')
-
-    query = {}
-    if timestart or timeend:
-        query['time_epoc'] = {}
-        if timestart:
-            timestart = float(timestart)
-            query['time_epoc']['$gte'] = timestart
-        if timeend:
-            timeend = float(timeend)
-            query['time_epoc']['$lte'] = timeend
-    if ipdst:
-        query['data.ipv4dst'] = ipdst
-
-    if ipsrc:
-        query['data.ipv4src'] = ipsrc
-
-    if macdst:
-        query['data.macdst'] = macdst
-
-    if macsrc:
-        query['data.macsrc'] = macsrc
-
-    if dstport:
-        dstport = int(dstport)
-        query['data.tcpdstport'] = dstport
-
-    if srcport:
-        srcport = int(srcport)
-        query['data.tcpsrcport'] = srcport
 
     if collection:
         collect = collection
